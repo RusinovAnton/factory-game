@@ -1,0 +1,220 @@
+:root {
+  --brand-color: #03a9f4;
+  --bg-color: var(--water-color);
+  --text-color: #003300;
+
+  /* Cells  */
+  --cell-size-cof: 0.328125;
+  --cell-size: calc((var(--sprite-frame-width) * var(--cell-size-cof)));
+  --terrain-color: #afd076;
+  --water-color: #03a9f4;
+  --cement-color: #bdbdb4;
+
+  --sprite-frame-width: 64;
+  --sprite-cols: 4;
+  --sprite-width: 256px;
+  --sprite-bg-size: calc(
+    var(--sprite-width) / calc(var(--sprite-frame-width) / var(--cell-size))
+  );
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+body.factory-type-selected--bank {
+  cursor: url(assets/factory-sprites/bank.png), auto;
+}
+
+body.factory-type-selected--mine {
+  cursor: url(assets/factory-sprites/coal-mine.png), auto;
+}
+
+body.factory-type-selected--wolframite-mine {
+  cursor: url(assets/factory-sprites/wolframite-mine.png), auto;
+}
+
+body.factory-type-selected--workshop {
+  cursor: url(assets/factory-sprites/workshop.png), auto;
+}
+
+body.factory-type-selected--storage {
+  cursor: url(assets/factory-sprites/storage.png), auto;
+}
+
+body.factory-type-selected--forge {
+  cursor: url(assets/factory-sprites/forge.png), auto;
+}
+
+body.factory-type-selected--furnace {
+  cursor: url(assets/factory-sprites/furnace.png), auto;
+}
+
+body.factory-type-selected--manufacturer {
+  cursor: url(assets/factory-sprites/manufacturer.png), auto;
+}
+
+body.factory-type-selected--industrial-factory {
+  cursor: url(assets/factory-sprites/industrial-factory.png), auto;
+}
+
+body.factory-type-selected--machine-shop {
+  cursor: url(assets/factory-sprites/machine-shop.png), auto;
+}
+
+body.factory-type-selected--research-lab {
+  cursor: url(assets/factory-sprites/research-lab.png), auto;
+}
+
+.controls-ui-overlay {
+  position: absolute;
+  /* visibility: hidden; */
+}
+
+.container {
+  padding: 2em;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  flex-shrink: 0;
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+
+  background-image: url(assets/factory-sprites.png);
+  background-size: var(--sprite-bg-size);
+}
+
+.cell:hover {
+  opacity: 0.5;
+}
+
+.cell--terrain {
+  background-color: var(--terrain-color);
+  background-position: calc(var(--cell-size) * -1 * 1px)
+    calc(var(--cell-size) * -4 * 1px);
+}
+
+.cell--forest {
+  background-position: calc(var(--cell-size) * -2 * 1px)
+    calc(var(--cell-size) * -4 * 1px);
+}
+
+.cell--sand {
+  background-position: calc(var(--cell-size) * -3 * 1px)
+    calc(var(--cell-size) * -4 * 1px);
+}
+
+.cell--water {
+  background-color: var(--water-color);
+  background-position: 0 calc(var(--cell-size) * -5 * 1px);
+}
+
+.cell--cement {
+  background-color: var(--cement-color);
+}
+
+.structure {
+  width: 100%;
+  height: 100%;
+
+  background-image: url(assets/factory-sprites.png);
+  background-size: var(--sprite-bg-size);
+}
+
+.structure--coal-source {
+  background-position: 0 0;
+}
+
+.structure--iron-source {
+  background-position: calc(var(--cell-size) * -1 * 1px) 0;
+}
+
+.structure--copper-source {
+  background-position: calc(var(--cell-size) * -2 * 1px) 0;
+}
+
+.structure--wolframite-source {
+  background-position: calc(var(--cell-size) * -3 * 1px) 0;
+}
+
+.structure--wolframite-mine {
+  background-position: 0 calc(var(--cell-size) * -1 * 1px);
+}
+
+.structure--coal-mine {
+  background-position: calc(var(--cell-size) * -3 * 1px)
+    calc(var(--cell-size) * -1 * 1px);
+}
+
+.structure--iron-mine {
+  background-position: calc(var(--cell-size) * -1 * 1px)
+    calc(var(--cell-size) * -1 * 1px);
+}
+
+.structure--copper-mine {
+  background-position: calc(var(--cell-size) * -2 * 1px)
+    calc(var(--cell-size) * -1 * 1px);
+}
+
+.structure--workshop {
+  background-position: 0 calc(var(--cell-size) * -2 * 1px);
+}
+
+.structure--storage {
+  background-position: calc(var(--cell-size) * -1 * 1px)
+    calc(var(--cell-size) * -2 * 1px);
+}
+
+.structure--furnace {
+  background-position: calc(var(--cell-size) * -2 * 1px)
+    calc(var(--cell-size) * -2 * 1px);
+}
+
+.structure--machine-shop {
+  background-position: calc(var(--cell-size) * -3 * 1px)
+    calc(var(--cell-size) * -2 * 1px);
+}
+
+.structure--forge {
+  background-position: 0 calc(var(--cell-size) * -3 * 1px);
+}
+
+.structure--industrial-factory {
+  background-position: calc(var(--cell-size) * -1 * 1px)
+    calc(var(--cell-size) * -3 * 1px);
+}
+
+.structure--manufacturer {
+  background-position: calc(var(--cell-size) * -2 * 1px)
+    calc(var(--cell-size) * -3 * 1px);
+}
+
+.structure--bank {
+  background-position: calc(var(--cell-size) * -3 * 1px)
+    calc(var(--cell-size) * -3 * 1px);
+}
+
+.structure--research-lab {
+  background-position: 0 calc(var(--cell-size) * -4 * 1px);
+}
+
+.resource {
+  background-image: url(assets/factory-sprites.png);
+  background-size: var(--sprite-bg-size);
+}
+
+.resource--crystal {
+  background-position: calc(var(--cell-size) * -1 * 1px)
+    calc(var(--cell-size) * -5 * 1px);
+}
