@@ -73,11 +73,6 @@ body.factory-type-selected--research-lab {
   cursor: url(assets/factory-sprites/research-lab.png), auto;
 }
 
-.controls-ui-overlay {
-  position: absolute;
-  /* visibility: hidden; */
-}
-
 .container {
   padding: 2em;
 }

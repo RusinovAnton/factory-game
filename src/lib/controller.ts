@@ -1,23 +1,27 @@
 import type { GameMap } from './components/GameMap';
 import { Bank } from './components/structures/Bank';
 import { gameMapEvents } from './event-emitter';
-import { HTMLElementRenderer } from './ui/renderer';
+import type { HTMLElementRenderer } from './ui/renderer';
 
 export class GameMapController {
   renderer: HTMLElementRenderer;
   map: GameMap;
+  selectedFactoryType: string | null = null;
 
-  constructor(map: GameMap) {
-    this.renderer = new HTMLElementRenderer(
-      document.getElementById('root'),
-      map
-    );
+  constructor(renderer: HTMLElementRenderer) {
+    this.renderer = renderer;
+    this.map = this.renderer.map;
+
+    this.initialize();
+  }
+
+  initialize() {
     this.renderer.render();
-    this.map = map;
-
     gameMapEvents.on('click', this.handleCellClick, this);
     gameMapEvents.on('mouseover', this.handleCellMouseOver, this);
   }
+
+  selectStructure(factoryType: string) {}
 
   handleCellMouseOver() {}
 
