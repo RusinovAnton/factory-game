@@ -7,7 +7,7 @@
   --cell-size-cof: 0.328125;
   --cell-size: calc((var(--sprite-frame-width) * var(--cell-size-cof)));
   --terrain-color: #afd076;
-  --water-color: #03a9f4;
+  --water-color: #b0f4ff;
   --cement-color: #bdbdb4;
 
   --sprite-frame-width: 64;
@@ -23,6 +23,7 @@
 }
 
 body {
+  font-family: Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: var(--bg-color);
@@ -30,47 +31,47 @@ body {
 }
 
 body.factory-type-selected--bank {
-  cursor: url(assets/factory-sprites/bank.png), auto;
+  cursor: url(assets/factory-sprites/cursor_bank.png), auto;
 }
 
 body.factory-type-selected--mine {
-  cursor: url(assets/factory-sprites/coal-mine.png), auto;
+  cursor: url(assets/factory-sprites/cursor_coal-mine.png), auto;
 }
 
 body.factory-type-selected--wolframite-mine {
-  cursor: url(assets/factory-sprites/wolframite-mine.png), auto;
+  cursor: url(assets/factory-sprites/cursor_wolframite-mine.png), auto;
 }
 
 body.factory-type-selected--workshop {
-  cursor: url(assets/factory-sprites/workshop.png), auto;
+  cursor: url(assets/factory-sprites/cursor_workshop.png), auto;
 }
 
 body.factory-type-selected--storage {
-  cursor: url(assets/factory-sprites/storage.png), auto;
+  cursor: url(assets/factory-sprites/cursor_storage.png), auto;
 }
 
 body.factory-type-selected--forge {
-  cursor: url(assets/factory-sprites/forge.png), auto;
+  cursor: url(assets/factory-sprites/cursor_forge.png), auto;
 }
 
 body.factory-type-selected--furnace {
-  cursor: url(assets/factory-sprites/furnace.png), auto;
+  cursor: url(assets/factory-sprites/cursor_furnace.png), auto;
 }
 
 body.factory-type-selected--manufacturer {
-  cursor: url(assets/factory-sprites/manufacturer.png), auto;
+  cursor: url(assets/factory-sprites/cursor_manufacturer.png), auto;
 }
 
 body.factory-type-selected--industrial-factory {
-  cursor: url(assets/factory-sprites/industrial-factory.png), auto;
+  cursor: url(assets/factory-sprites/cursor_industrial-factory.png), auto;
 }
 
 body.factory-type-selected--machine-shop {
-  cursor: url(assets/factory-sprites/machine-shop.png), auto;
+  cursor: url(assets/factory-sprites/cursor_machine-shop.png), auto;
 }
 
 body.factory-type-selected--research-lab {
-  cursor: url(assets/factory-sprites/research-lab.png), auto;
+  cursor: url(assets/factory-sprites/cursor_research-lab.png), auto;
 }
 
 .container {
@@ -212,4 +213,9 @@ body.factory-type-selected--research-lab {
 .resource--crystal {
   background-position: calc(var(--cell-size) * -1 * 1px)
     calc(var(--cell-size) * -5 * 1px);
+}
+
+.game-map {
+  position: relative;
+  width: fit-content;
 }

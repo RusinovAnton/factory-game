@@ -19,6 +19,7 @@
     "vite": "^4.1.0"
   },
   "dependencies": {
-    "eventemitter3": "^5.0.0"
+    "eventemitter3": "^5.0.0",
+    "normalize.css": "^8.0.1"
   }
 }
