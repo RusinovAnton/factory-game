@@ -1,30 +1,25 @@
-import { EventEmitter, type EmitterClass } from '../../utils/event-emitter';
-import type { GameMap } from './GameMap';
+import { type Emittable, EventEmitter } from '../utils/event-emitter';
+import type { GameMap } from './model';
 
-export class GameMapHTMLRenderer implements EmitterClass {
-  map: GameMap;
+export class GameMapHTMLRenderer implements Emittable {
   root: HTMLElement;
   selectedFactoryType: string;
   #rendered: boolean = false;
-  #events: EventEmitter;
 
-  constructor(root: HTMLElement | null, map: GameMap) {
+  #ee: EventEmitter;
+  on: EventEmitter['on'];
+  once: EventEmitter['once'];
+
+  constructor(root: HTMLElement | null) {
     if (!root) {
       throw new Error('root element not found');
     }
 
     this.root = root;
-    this.map = map;
-    this.#events = new EventEmitter();
-    this.map.on('build', this.renderBuiltStructure);
-  }
 
-  on(e, fn, c?) {
-    return this.#events.on(e, fn, c);
-  }
-
-  once(e, fn, c?) {
-    return this.#events.once(e, fn, c);
+    this.#ee = new EventEmitter();
+    this.on = this.#ee.on.bind(this.#ee);
+    this.once = this.#ee.once.bind(this.#ee);
   }
 
   handleCellInteraction(event: Event) {
@@ -38,8 +33,8 @@ export class GameMapHTMLRenderer implements EmitterClass {
       return;
     }
 
-    this.#events.emit(event.type, {
-      coord: { x: coordX, y: coordY },
+    this.#ee.emit(event.type, {
+      coord: { x: +coordX, y: +coordY },
     });
   }
 
@@ -54,10 +49,10 @@ export class GameMapHTMLRenderer implements EmitterClass {
     document.body.classList.add(`factory-type-selected--${factoryType}`);
   }
 
-  render(): Element {
+  init(map: GameMap): Element {
     console.log('Rendering map...');
     const template = document.createElement('template');
-    template.innerHTML = `<div id="${this.map.name}" class="game-map__root"></div>`;
+    template.innerHTML = `<div id="${map.name}" class="game-map__root"></div>`;
     // @ts-ignore
     const mapElement = template.content.cloneNode(true).firstElementChild;
 
@@ -65,7 +60,7 @@ export class GameMapHTMLRenderer implements EmitterClass {
       throw new Error("Couldn't render map div");
     }
 
-    const rows: string = this.map.cells.reduce((resultStr, row) => {
+    const rows: string = map.cells.reduce((resultStr, row) => {
       let rowString = '<div class="row">';
 
       let cellsString = row.reduce((resultStr, cell) => {
@@ -89,10 +84,10 @@ export class GameMapHTMLRenderer implements EmitterClass {
     }, '');
     mapElement.innerHTML = rows;
 
-    mapElement.addEventListener(
-      'mouseover',
-      this.handleCellInteraction.bind(this),
-    );
+    // mapElement.addEventListener(
+    //   'mouseover',
+    //   this.handleCellInteraction.bind(this),
+    // );
     mapElement.addEventListener('click', this.handleCellInteraction.bind(this));
     this.root.appendChild(mapElement);
     this.#rendered = true;
@@ -100,8 +95,7 @@ export class GameMapHTMLRenderer implements EmitterClass {
     return mapElement;
   }
 
-  renderBuiltStructure(event) {
-    const { coord, structure } = event;
+  renderStructure(coord, structure) {
     console.log(
       'Rendering built structure: ',
       structure.name,

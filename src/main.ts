@@ -1,9 +1,12 @@
-import Controls from './Controls.svelte';
 import 'normalize.css';
 import './index.css';
-import { controller } from './lib/containers/GameMap';
+
+import Controls from './Controls.svelte';
+import { controller } from './core/GameMap';
 
 console.log('Hello World!');
+
+controller.init();
 
 const app = new Controls({
   target: document.getElementById('interface'),

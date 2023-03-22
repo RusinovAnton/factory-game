@@ -4,15 +4,18 @@
   --text-color: #003300;
 
   /* Cells  */
-  --cell-size-cof: 0.328125;
-  --cell-size: calc((var(--sprite-frame-width) * var(--cell-size-cof)));
   --terrain-color: #afd076;
+  --forest-color: #086826;
   --water-color: #b0f4ff;
   --cement-color: #bdbdb4;
 
   --sprite-frame-width: 64;
   --sprite-cols: 4;
-  --sprite-width: 256px;
+  --sprite-width: 320px;
+
+  --cell-size-cof: 1;
+  --cell-size: calc((var(--sprite-frame-width) * var(--cell-size-cof)));
+
   --sprite-bg-size: calc(
     var(--sprite-width) / calc(var(--sprite-frame-width) / var(--cell-size))
   );
@@ -86,9 +89,6 @@ body.factory-type-selected--research-lab {
   flex-shrink: 0;
   width: calc(var(--cell-size) * 1px);
   height: calc(var(--cell-size) * 1px);
-
-  background-image: url(assets/factory-sprites.png);
-  background-size: var(--sprite-bg-size);
 }
 
 .cell:hover {
@@ -97,23 +97,18 @@ body.factory-type-selected--research-lab {
 
 .cell--terrain {
   background-color: var(--terrain-color);
-  background-position: calc(var(--cell-size) * -1 * 1px)
-    calc(var(--cell-size) * -4 * 1px);
 }
 
 .cell--forest {
-  background-position: calc(var(--cell-size) * -2 * 1px)
-    calc(var(--cell-size) * -4 * 1px);
+  background-color: var(--forest-color);
 }
 
 .cell--sand {
-  background-position: calc(var(--cell-size) * -3 * 1px)
-    calc(var(--cell-size) * -4 * 1px);
+  background-color: var(--sand-color);
 }
 
 .cell--water {
   background-color: var(--water-color);
-  background-position: 0 calc(var(--cell-size) * -5 * 1px);
 }
 
 .cell--cement {
@@ -123,96 +118,6 @@ body.factory-type-selected--research-lab {
 .structure {
   width: 100%;
   height: 100%;
-
-  background-image: url(assets/factory-sprites.png);
-  background-size: var(--sprite-bg-size);
-}
-
-.structure--coal-source {
-  background-position: 0 0;
-}
-
-.structure--iron-source {
-  background-position: calc(var(--cell-size) * -1 * 1px) 0;
-}
-
-.structure--copper-source {
-  background-position: calc(var(--cell-size) * -2 * 1px) 0;
-}
-
-.structure--wolframite-source {
-  background-position: calc(var(--cell-size) * -3 * 1px) 0;
-}
-
-.structure--wolframite-mine {
-  background-position: 0 calc(var(--cell-size) * -1 * 1px);
-}
-
-.structure--coal-mine {
-  background-position: calc(var(--cell-size) * -3 * 1px)
-    calc(var(--cell-size) * -1 * 1px);
-}
-
-.structure--iron-mine {
-  background-position: calc(var(--cell-size) * -1 * 1px)
-    calc(var(--cell-size) * -1 * 1px);
-}
-
-.structure--copper-mine {
-  background-position: calc(var(--cell-size) * -2 * 1px)
-    calc(var(--cell-size) * -1 * 1px);
-}
-
-.structure--workshop {
-  background-position: 0 calc(var(--cell-size) * -2 * 1px);
-}
-
-.structure--storage {
-  background-position: calc(var(--cell-size) * -1 * 1px)
-    calc(var(--cell-size) * -2 * 1px);
-}
-
-.structure--furnace {
-  background-position: calc(var(--cell-size) * -2 * 1px)
-    calc(var(--cell-size) * -2 * 1px);
-}
-
-.structure--machine-shop {
-  background-position: calc(var(--cell-size) * -3 * 1px)
-    calc(var(--cell-size) * -2 * 1px);
-}
-
-.structure--forge {
-  background-position: 0 calc(var(--cell-size) * -3 * 1px);
-}
-
-.structure--industrial-factory {
-  background-position: calc(var(--cell-size) * -1 * 1px)
-    calc(var(--cell-size) * -3 * 1px);
-}
-
-.structure--manufacturer {
-  background-position: calc(var(--cell-size) * -2 * 1px)
-    calc(var(--cell-size) * -3 * 1px);
-}
-
-.structure--bank {
-  background-position: calc(var(--cell-size) * -3 * 1px)
-    calc(var(--cell-size) * -3 * 1px);
-}
-
-.structure--research-lab {
-  background-position: 0 calc(var(--cell-size) * -4 * 1px);
-}
-
-.resource {
-  background-image: url(assets/factory-sprites.png);
-  background-size: var(--sprite-bg-size);
-}
-
-.resource--crystal {
-  background-position: calc(var(--cell-size) * -1 * 1px)
-    calc(var(--cell-size) * -5 * 1px);
 }
 
 .game-map {

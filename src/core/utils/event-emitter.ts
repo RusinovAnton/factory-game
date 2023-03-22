@@ -1,14 +1,16 @@
-import EventEmitter3 from 'eventemitter3';
+import EventEmitter3, {
+  type EventEmitter as EventEmitterT,
+} from 'eventemitter3';
 
 // FIXME: get value from .env
 const DEBUG = true;
 
 export class EventEmitter extends EventEmitter3 {
-  debug: boolean = DEBUG;
+  debug: boolean;
 
-  constructor(debug?: boolean) {
+  constructor(debug: boolean = DEBUG) {
     super();
-    this.debug = DEBUG;
+    this.debug = debug;
   }
 
   #log(eventType, payload) {
@@ -22,8 +24,7 @@ export class EventEmitter extends EventEmitter3 {
   }
 }
 
-export interface EmitterClass {
-  on(eventType, fn, context?): EmitterClass;
-
-  once(eventType, fn, context?): EmitterClass;
+export interface Emittable {
+  on: EventEmitterT['on'];
+  once: EventEmitterT['once'];
 }

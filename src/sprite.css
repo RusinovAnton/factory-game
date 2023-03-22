@@ -1,0 +1,172 @@
+.sprite {
+  background-image: url(assets/spritesheet.png);
+  background-repeat: no-repeat;
+  background-size: var(--sprite-bg-size);
+  display: block;
+}
+
+.sprite-sprite_00 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: 0 0;
+}
+
+.sprite-sprite_01 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -1px) 0;
+}
+
+.sprite-sprite_02 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -2px) 0;
+}
+
+.sprite-sprite_03 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -3px) 0;
+}
+
+.sprite-sprite_04 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -4px) 0;
+}
+
+.sprite-sprite_05 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: 0 calc(var(--cell-size) * -1px);
+}
+
+.sprite-sprite_06 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -1px)
+    calc(var(--cell-size) * -1px);
+}
+
+.sprite-sprite_07 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -2px)
+    calc(var(--cell-size) * -1px);
+}
+
+.sprite-sprite_08 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -3px)
+    calc(var(--cell-size) * -1px);
+}
+
+.sprite-sprite_09 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -4px)
+    calc(var(--cell-size) * -1px);
+}
+
+.sprite-sprite_10 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: 0 calc(var(--cell-size) * -2px);
+}
+
+.sprite-sprite_11 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -1px)
+    calc(var(--cell-size) * -2px);
+}
+
+.sprite-sprite_12 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -2px)
+    calc(var(--cell-size) * -2px);
+}
+
+.sprite-sprite_13 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -3px)
+    calc(var(--cell-size) * -2px);
+}
+
+.sprite-sprite_14 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -4px)
+    calc(var(--cell-size) * -2px);
+}
+
+.sprite-sprite_15 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: 0 calc(var(--cell-size) * -3px);
+}
+
+.sprite-sprite_16 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -1px)
+    calc(var(--cell-size) * -3px);
+}
+
+.sprite-sprite_17 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -2px)
+    calc(var(--cell-size) * -3px);
+}
+
+.sprite-sprite_18 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -3px)
+    calc(var(--cell-size) * -3px);
+}
+
+.sprite-sprite_19 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -4px)
+    calc(var(--cell-size) * -3px);
+}
+
+.sprite-sprite_20 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: 0 calc(var(--cell-size) * -4px);
+}
+
+.sprite-sprite_21 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -1px)
+    calc(var(--cell-size) * -4px);
+}
+
+.sprite-sprite_22 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -2px)
+    calc(var(--cell-size) * -4px);
+}
+
+.sprite-sprite_23 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -3px)
+    calc(var(--cell-size) * -4px);
+}
+
+.sprite-sprite_24 {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  background-position: calc(var(--cell-size) * -4px)
+    calc(var(--cell-size) * -4px);
+}

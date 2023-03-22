@@ -50,7 +50,7 @@
 
 <style>
   .controls-ui {
-    position: absolute;
+    position: fixed;
     bottom: 16px;
     left: 16px;
     background: rgba(255, 255, 255, 0.56);
@@ -83,5 +83,9 @@
   .buttons-row {
     display: flex;
     gap: 10px;
+  }
+
+  .buttons-row:not(:last-child) {
+    margin-bottom: 10px;
   }
 </style>
