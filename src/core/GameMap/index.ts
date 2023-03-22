@@ -1,6 +1,6 @@
-import { GameMap } from './model';
-import { GameMapController } from './controller';
-import { GameMapHTMLRenderer } from './view';
+import { GameMap } from './GameMap';
+import { GameMapController } from './GameMapController';
+import { GameMapHTMLRenderer } from './GameMapHTMLRenderer';
 
 const MAP_SIZE = 64;
 const HEIGHT = MAP_SIZE / 2;

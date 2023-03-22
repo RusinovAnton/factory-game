@@ -1,5 +1,5 @@
 import { type Emittable, EventEmitter } from '../utils/event-emitter';
-import type { GameMap } from './model';
+import type { GameMap } from './GameMap';
 
 export class GameMapHTMLRenderer implements Emittable {
   root: HTMLElement;
@@ -95,6 +95,14 @@ export class GameMapHTMLRenderer implements Emittable {
     return mapElement;
   }
 
+  #getCell(coord) {
+    const { x, y } = coord;
+    const cell = document.querySelector(
+      `[data-coord-x="${x}"][data-coord-y="${y}"]`,
+    );
+    return cell;
+  }
+
   renderStructure(coord, structure) {
     console.log(
       'Rendering built structure: ',
@@ -104,5 +112,9 @@ export class GameMapHTMLRenderer implements Emittable {
       'y: ',
       coord.y,
     );
+
+    const cell = this.#getCell(coord);
+    console.log(cell);
+    cell.innerHTML = `<span>${structure.name}</span>`;
   }
 }

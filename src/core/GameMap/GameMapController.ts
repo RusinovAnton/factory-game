@@ -1,5 +1,5 @@
-import type { GameMap } from './model';
-import type { GameMapHTMLRenderer } from './view';
+import type { GameMap } from './GameMap';
+import type { GameMapHTMLRenderer } from './GameMapHTMLRenderer';
 import { Structure } from '../structures/Structure';
 
 export class GameMapController {
@@ -45,7 +45,6 @@ export class GameMapController {
     const { coord, id } = event;
     const structure = new Structure(factoryType);
     this.model.build(coord, structure);
-
     this.selectStructure(null);
   }
 }
