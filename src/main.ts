@@ -6,10 +6,15 @@ import { controller } from './core/GameMap';
 
 console.log('Hello World!');
 
-controller.init();
+const nodes = {
+  map: document.getElementById('game-map'),
+  controls: document.getElementById('interface'),
+};
+
+controller.init(nodes.map);
 
 const app = new Controls({
-  target: document.getElementById('interface'),
+  target: nodes.controls,
   props: {
     onStructureSelect(factoryType: string) {
       controller.selectStructure(factoryType);

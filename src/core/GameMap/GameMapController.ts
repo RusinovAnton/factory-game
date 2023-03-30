@@ -1,50 +1,36 @@
-import type { GameMap } from './GameMap';
-import type { GameMapHTMLRenderer } from './GameMapHTMLRenderer';
+import type { GameMap } from './model/GameMap';
+import type { GameMapHTMLRenderer } from './view/GameMapHTMLRenderer';
 import { Structure } from '../structures/Structure';
 
 export class GameMapController {
   view: GameMapHTMLRenderer;
   model: GameMap;
-  state: {
-    selectedFactoryType: string | null;
-  } = { selectedFactoryType: null };
 
   constructor(model: GameMap, view: GameMapHTMLRenderer) {
     this.view = view;
     this.model = model;
   }
 
-  init() {
+  init(mapNode) {
     this.model.init();
-    this.view.init(this.model);
+    this.view.init(mapNode, this.model);
 
-    this.view.on('click', this.#handleCellClick, this);
-    // this.view.on('mouseover', this.#handleCellMouseOver, this);
-
-    this.model.on('build', this.handleBuilding, this);
-  }
-
-  destroy() {
-    throw new Error('destroy method not implemented');
+    this.view.on('structure:build', this.#handleStructureBuild, this);
+    this.model.on('structure:built', this.handleBuilding, this);
   }
 
   selectStructure(factoryType: string | null) {
-    this.state.selectedFactoryType = factoryType;
-    this.view.selectFactoryType(factoryType);
-    factoryType && console.log(`Selected factory type: ${factoryType}`);
+    this.view.selectStructure(factoryType);
   }
 
   handleBuilding(event) {
-    this.view.renderStructure(event.coord, event.structure);
+    const { coord, structure } = event;
+    this.view.renderStructure(coord, structure);
   }
 
-  #handleCellClick(event: any) {
-    const factoryType = this.state.selectedFactoryType;
-    if (!factoryType) return;
-
-    const { coord, id } = event;
-    const structure = new Structure(factoryType);
-    this.model.build(coord, structure);
+  #handleStructureBuild(event: any) {
+    const { coord, structureType } = event;
+    this.model.build(coord, structureType);
     this.selectStructure(null);
   }
 }

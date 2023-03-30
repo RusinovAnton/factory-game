@@ -1,9 +1,9 @@
-import { Cell } from '../Cell';
-import { Field } from '../Field';
-import { Plain } from '../Plain';
-import type { Structure } from '../structures/Structure';
-import { EventEmitter, type Emittable } from '../utils/event-emitter';
-import { yay } from '../utils/yay/yay';
+import { Cell } from '../../Cell';
+import { Field } from '../../Field';
+import { Plain } from '../../Plain';
+import { Structure } from '../../structures/Structure';
+import { EventEmitter, type Emittable } from '../../utils/event-emitter';
+import { yay } from '../../utils/yay/yay';
 
 export class GameMap extends Plain implements Emittable {
   name: string;
@@ -45,14 +45,14 @@ export class GameMap extends Plain implements Emittable {
     );
   }
 
-  build(coord: { x: number; y: number }, structure: Structure) {
+  build(coord: { x: number; y: number }, structureType: string) {
     const { x, y } = coord;
-    // FIXME: add canBuild() check
+
+    // TODO: add canBuild() check
+
+    const structure = new Structure(structureType);
     this.cells[y][x].structure = structure;
-
-    console.log('building at: ', x, ' ', y);
-
-    this.#ee.emit('build', { coord, structure });
+    this.#ee.emit('structure:built', { coord, structure });
   }
 
   toJSON() {

@@ -1,55 +1,36 @@
-import { type Emittable, EventEmitter } from '../utils/event-emitter';
-import type { GameMap } from './GameMap';
+import { gameSounds } from '../../sound/GameSounds';
+import { type Emittable, EventEmitter } from '../../utils/event-emitter';
+import type { GameMap } from '../model/GameMap';
+
+interface ViewState {
+  selectedStructureType: string | null;
+}
 
 export class GameMapHTMLRenderer implements Emittable {
   root: HTMLElement;
-  selectedFactoryType: string;
+  state: ViewState = {
+    selectedStructureType: null,
+  };
   #rendered: boolean = false;
 
   #ee: EventEmitter;
   on: EventEmitter['on'];
   once: EventEmitter['once'];
 
-  constructor(root: HTMLElement | null) {
-    if (!root) {
-      throw new Error('root element not found');
-    }
-
-    this.root = root;
-
+  constructor() {
     this.#ee = new EventEmitter();
     this.on = this.#ee.on.bind(this.#ee);
     this.once = this.#ee.once.bind(this.#ee);
+
+    this.#ee.on('cell:click', this.#handleCellClick.bind(this));
   }
 
-  handleCellInteraction(event: Event) {
-    if (!event.target) return;
-
-    // @ts-ignore
-    const { coordX, coordY } = event.target.dataset;
-
-    if (!coordX && !coordY) {
-      console.log('not a cell');
-      return;
+  init(mapNode: HTMLElement, map: GameMap): Element {
+    if (!mapNode) {
+      throw new Error('root element not found');
     }
 
-    this.#ee.emit(event.type, {
-      coord: { x: +coordX, y: +coordY },
-    });
-  }
-
-  selectFactoryType(factoryType: string) {
-    document.body.classList.remove(
-      `factory-type-selected--${this.selectedFactoryType}`,
-    );
-    this.selectedFactoryType = factoryType;
-
-    if (!factoryType) return;
-
-    document.body.classList.add(`factory-type-selected--${factoryType}`);
-  }
-
-  init(map: GameMap): Element {
+    this.root = mapNode;
     console.log('Rendering map...');
     const template = document.createElement('template');
     template.innerHTML = `<div id="${map.name}" class="game-map__root"></div>`;
@@ -88,11 +69,51 @@ export class GameMapHTMLRenderer implements Emittable {
     //   'mouseover',
     //   this.handleCellInteraction.bind(this),
     // );
-    mapElement.addEventListener('click', this.handleCellInteraction.bind(this));
+    mapElement.addEventListener(
+      'click',
+      this.#handleCellInteraction.bind(this),
+    );
     this.root.appendChild(mapElement);
     this.#rendered = true;
 
     return mapElement;
+  }
+
+  selectStructure(factoryType: string | null) {
+    if (this.state.selectedStructureType) {
+      document.body.classList.remove(
+        `factory-type-selected--${this.state.selectedStructureType}`,
+      );
+    }
+
+    this.state.selectedStructureType = factoryType;
+    if (!factoryType) return;
+    document.body.classList.add(`factory-type-selected--${factoryType}`);
+  }
+
+  #handleCellInteraction(event: Event) {
+    if (!event.target) return;
+    const cell: HTMLElement = (event.target as HTMLElement).closest('.cell');
+    if (!cell) return;
+
+    const target = event.target as HTMLElement;
+
+    const { coordX, coordY } = cell.dataset;
+
+    this.#ee.emit(`cell:${event.type}`, {
+      coord: { x: +coordX, y: +coordY },
+    });
+  }
+
+  #handleCellClick(event) {
+    if (!this.state.selectedStructureType) return;
+
+    gameSounds.haptic();
+
+    this.#ee.emit('structure:build', {
+      structureType: this.state.selectedStructureType,
+      coord: event.coord,
+    });
   }
 
   #getCell(coord) {

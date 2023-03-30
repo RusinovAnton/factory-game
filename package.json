@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "eventemitter3": "^5.0.0",
+    "howler": "^2.2.3",
     "normalize.css": "^8.0.1"
   }
 }
