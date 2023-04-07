@@ -74,8 +74,8 @@
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 4px;
     border: 0;
-    width: calc(var(--cell-size) * 1px);
-    height: calc(var(--cell-size) * 1px);
+    width: calc(var(--tile-size) * 1px);
+    height: calc(var(--tile-size) * 1px);
     font-size: 0;
     text-indent: -9999999px;
   }

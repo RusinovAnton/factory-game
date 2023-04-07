@@ -22,7 +22,7 @@ export class GameMapHTMLRenderer implements Emittable {
     this.on = this.#ee.on.bind(this.#ee);
     this.once = this.#ee.once.bind(this.#ee);
 
-    this.#ee.on('cell:click', this.#handleCellClick.bind(this));
+    this.#ee.on('tile:click', this.#handleCellClick.bind(this));
   }
 
   init(mapNode: HTMLElement, map: GameMap): Element {
@@ -44,11 +44,11 @@ export class GameMapHTMLRenderer implements Emittable {
     const rows: string = map.cells.reduce((resultStr, row) => {
       let rowString = '<div class="row">';
 
-      let cellsString = row.reduce((resultStr, cell) => {
-        const { coord, field, structure } = cell;
+      let cellsString = row.reduce((resultStr, tile) => {
+        const { coord, field, structure } = tile;
         const { x, y } = coord;
 
-        let cellString = `<div class="cell cell--${field.type}" data-coord-x="${x}" data-coord-y="${y}">`;
+        let cellString = `<div class="tile tile--${field.type}" data-coord-x="${x}" data-coord-y="${y}">`;
         if (structure) {
           cellString =
             cellString +
@@ -93,14 +93,14 @@ export class GameMapHTMLRenderer implements Emittable {
 
   #handleCellInteraction(event: Event) {
     if (!event.target) return;
-    const cell: HTMLElement = (event.target as HTMLElement).closest('.cell');
-    if (!cell) return;
+    const tile: HTMLElement = (event.target as HTMLElement).closest('.tile');
+    if (!tile) return;
 
     const target = event.target as HTMLElement;
 
-    const { coordX, coordY } = cell.dataset;
+    const { coordX, coordY } = tile.dataset;
 
-    this.#ee.emit(`cell:${event.type}`, {
+    this.#ee.emit(`tile:${event.type}`, {
       coord: { x: +coordX, y: +coordY },
     });
   }
@@ -118,10 +118,10 @@ export class GameMapHTMLRenderer implements Emittable {
 
   #getCell(coord) {
     const { x, y } = coord;
-    const cell = document.querySelector(
+    const tile = document.querySelector(
       `[data-coord-x="${x}"][data-coord-y="${y}"]`,
     );
-    return cell;
+    return tile;
   }
 
   renderStructure(coord, structure) {
@@ -134,8 +134,8 @@ export class GameMapHTMLRenderer implements Emittable {
       coord.y,
     );
 
-    const cell = this.#getCell(coord);
-    console.log(cell);
-    cell.innerHTML = `<span>${structure.name}</span>`;
+    const tile = this.#getCell(coord);
+    console.log(tile);
+    tile.innerHTML = `<span>${structure.name}</span>`;
   }
 }

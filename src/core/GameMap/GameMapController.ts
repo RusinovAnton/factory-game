@@ -1,6 +1,7 @@
 import type { GameMap } from './model/GameMap';
 import type { GameMapHTMLRenderer } from './view/GameMapHTMLRenderer';
 import { Structure } from '../structures/Structure';
+import { gameStore } from '../storage/Storage';
 
 export class GameMapController {
   view: GameMapHTMLRenderer;
@@ -11,8 +12,9 @@ export class GameMapController {
     this.model = model;
   }
 
-  init(mapNode) {
-    this.model.init();
+  async init(mapNode) {
+    const savedGame = await gameStore.restore();
+    this.model.init(savedGame);
     this.view.init(mapNode, this.model);
 
     this.view.on('structure:build', this.#handleStructureBuild, this);

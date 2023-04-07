@@ -13,11 +13,11 @@
   --sprite-cols: 4;
   --sprite-width: 320px;
 
-  --cell-size-cof: 1;
-  --cell-size: calc((var(--sprite-frame-width) * var(--cell-size-cof)));
+  --tile-size-cof: 1;
+  --tile-size: calc((var(--sprite-frame-width) * var(--tile-size-cof)));
 
   --sprite-bg-size: calc(
-    var(--sprite-width) / calc(var(--sprite-frame-width) / var(--cell-size))
+    var(--sprite-width) / calc(var(--sprite-frame-width) / var(--tile-size))
   );
 }
 
@@ -85,33 +85,33 @@ body.factory-type-selected--research-lab {
   display: flex;
 }
 
-.cell {
+.tile {
   flex-shrink: 0;
-  width: calc(var(--cell-size) * 1px);
-  height: calc(var(--cell-size) * 1px);
+  width: calc(var(--tile-size) * 1px);
+  height: calc(var(--tile-size) * 1px);
 }
 
-.cell:hover {
+.tile:hover {
   opacity: 0.5;
 }
 
-.cell--terrain {
+.tile--terrain {
   background-color: var(--terrain-color);
 }
 
-.cell--forest {
+.tile--forest {
   background-color: var(--forest-color);
 }
 
-.cell--sand {
+.tile--sand {
   background-color: var(--sand-color);
 }
 
-.cell--water {
+.tile--water {
   background-color: var(--water-color);
 }
 
-.cell--cement {
+.tile--cement {
   background-color: var(--cement-color);
 }
 

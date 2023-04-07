@@ -1,13 +1,15 @@
-import { Cell } from '../../Cell';
+import { Tile } from '../../Tile';
 import { Field } from '../../Field';
 import { Plain } from '../../Plain';
 import { Structure } from '../../structures/Structure';
 import { EventEmitter, type Emittable } from '../../utils/event-emitter';
 import { yay } from '../../utils/yay/yay';
 
+type CellsLayout = Array<Array<Tile>>;
+
 export class GameMap extends Plain implements Emittable {
   name: string;
-  cells: Array<Array<Cell>> = [];
+  cells: CellsLayout = [];
 
   #ee: EventEmitter;
   on: EventEmitter['on'];
@@ -23,26 +25,18 @@ export class GameMap extends Plain implements Emittable {
     this.once = this.#ee.once.bind(this.#ee);
   }
 
-  init() {
+  init(savedState) {
     console.log('Initializing game map...');
 
-    this.name = yay();
-
-    this.cells = this.buildCells();
-  }
-
-  private buildCells() {
-    let cellsArray = new Array(this.height)
-      .fill(null)
-      .map(() => new Array(this.width).fill(null));
-
-    return cellsArray.map((row, y) =>
-      row.map((_, x) => {
-        const cell = new Cell(x, y);
-        cell.field = new Field();
-        return cell;
-      }),
-    );
+    if (savedState) {
+      this.width = savedState.width;
+      this.height = savedState.height;
+      this.name = savedState.name;
+      this.cells = this.buildCells();
+    } else {
+      this.name = yay();
+      this.cells = this.restoreCells(savedStateState.cells);
+    }
   }
 
   build(coord: { x: number; y: number }, structureType: string) {
@@ -52,6 +46,7 @@ export class GameMap extends Plain implements Emittable {
 
     const structure = new Structure(structureType);
     this.cells[y][x].structure = structure;
+
     this.#ee.emit('structure:built', { coord, structure });
   }
 
@@ -60,5 +55,37 @@ export class GameMap extends Plain implements Emittable {
       name: this.name,
       cells: this.cells,
     };
+  }
+
+  private buildCellsLayout() {
+    return new Array(this.height)
+      .fill(null)
+      .map(() => new Array(this.width).fill(null));
+  }
+
+  private buildCells() {
+    let cellsArray = this.buildCellsLayout();
+
+    return cellsArray.map((row, y) =>
+      row.map((_, x) => {
+        const tile = new Tile(x, y);
+        tile.field = new Field();
+        return tile;
+      }),
+    );
+  }
+
+  private restoreCells(savedCells: CellsLayout) {
+    let cellsArray = this.buildCellsLayout();
+
+    return cellsArray.map((row, y) =>
+      row.map((_, x) => {
+        const tile = new Tile(x, y);
+        tile.field = new Field();
+        return tile;
+      }),
+    );
+
+    return savedCells;
   }
 }

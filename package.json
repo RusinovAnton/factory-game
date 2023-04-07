@@ -21,6 +21,7 @@
   "dependencies": {
     "eventemitter3": "^5.0.0",
     "howler": "^2.2.3",
+    "localforage": "^1.10.0",
     "normalize.css": "^8.0.1"
   }
 }
