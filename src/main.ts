@@ -1,23 +1,27 @@
 import 'normalize.css';
 import './index.css';
 
-import Controls from './Controls.svelte';
-import { controller } from './core/GameMap';
+import StructureMenu from './StructureMenu.svelte';
+import { GameMapController } from './core/GameMap/GameMapController';
 
 console.log('Hello World!');
 
 const nodes = {
   map: document.getElementById('game-map'),
-  controls: document.getElementById('interface'),
+  structureMenu: document.getElementById('interface'),
 };
 
-controller.init(nodes.map);
+const controller = new GameMapController(nodes.map);
 
-const app = new Controls({
-  target: nodes.controls,
+// @ts-ignore
+window.theController = controller;
+
+const app = new StructureMenu({
+  target: nodes.structureMenu,
   props: {
     onStructureSelect(factoryType: string) {
-      controller.selectStructure(factoryType);
+      // controller.selectStructure(factoryType);
+      console.log(factoryType);
     },
   },
 });

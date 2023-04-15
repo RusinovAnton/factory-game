@@ -6,9 +6,10 @@ import EventEmitter3, {
 const DEBUG = true;
 
 export class EventEmitter extends EventEmitter3 {
-  debug: boolean;
+  type?: string;
+  debug?: boolean;
 
-  constructor(debug: boolean = DEBUG) {
+  constructor(type?: string, debug: boolean = DEBUG) {
     super();
     this.debug = debug;
   }
@@ -20,6 +21,9 @@ export class EventEmitter extends EventEmitter3 {
 
   emit(eventType, payload): boolean {
     this.#log(eventType, payload);
+    if (this.type && !payload.hasOwnProperty('type')) {
+      payload.type = payload.type || this.type;
+    }
     return super.emit(eventType, payload);
   }
 }

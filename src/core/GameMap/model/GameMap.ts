@@ -1,91 +1,63 @@
-import { Tile } from '../../Tile';
-import { Field } from '../../Field';
 import { Plain } from '../../Plain';
-import { Structure } from '../../structures/Structure';
+import type { Vector } from '../../Vector';
 import { EventEmitter, type Emittable } from '../../utils/event-emitter';
 import { yay } from '../../utils/yay/yay';
+import { Layer } from './Layer';
+import { PathLayer } from './PathLayer';
 
-type CellsLayout = Array<Array<Tile>>;
+const savedState = null;
 
 export class GameMap extends Plain implements Emittable {
   name: string;
-  cells: CellsLayout = [];
+  layers: Layer[] = [];
+  pathLayer: PathLayer;
+  baseLayer: Layer;
 
   #ee: EventEmitter;
   on: EventEmitter['on'];
   once: EventEmitter['once'];
 
-  constructor(w: number, h: number) {
-    super(w, h);
-    this.width = w;
-    this.height = h;
+  constructor(size: Vector) {
+    super(size);
 
-    this.#ee = new EventEmitter();
+    const eventEmitter = new EventEmitter('model:update');
+    this.#ee = eventEmitter;
     this.on = this.#ee.on.bind(this.#ee);
     this.once = this.#ee.once.bind(this.#ee);
+
+    this.baseLayer = new Layer(size);
+    this.pathLayer = new PathLayer(size, eventEmitter);
+    this.layers.push(this.baseLayer);
+    this.layers.push(this.pathLayer);
+
+    this.#init();
   }
 
-  init(savedState) {
+  #init() {
     console.log('Initializing game map...');
 
     if (savedState) {
-      this.width = savedState.width;
-      this.height = savedState.height;
-      this.name = savedState.name;
-      this.cells = this.buildCells();
+      this.#restoreSavedState();
     } else {
       this.name = yay();
-      this.cells = this.restoreCells(savedStateState.cells);
     }
   }
 
-  build(coord: { x: number; y: number }, structureType: string) {
-    const { x, y } = coord;
-
-    // TODO: add canBuild() check
-
-    const structure = new Structure(structureType);
-    this.cells[y][x].structure = structure;
-
-    this.#ee.emit('structure:built', { coord, structure });
+  #restoreSavedState() {
+    const { name, width, height, layers } = savedState;
+    this.width = savedState.width;
+    this.height = savedState.height;
+    this.name = savedState.name;
+    this.layers = [];
   }
+
+  build(coord: { x: number; y: number }, structureType: string) {}
 
   toJSON() {
     return {
       name: this.name,
-      cells: this.cells,
+      size: this.size,
+      layers: this.layers,
     };
-  }
-
-  private buildCellsLayout() {
-    return new Array(this.height)
-      .fill(null)
-      .map(() => new Array(this.width).fill(null));
-  }
-
-  private buildCells() {
-    let cellsArray = this.buildCellsLayout();
-
-    return cellsArray.map((row, y) =>
-      row.map((_, x) => {
-        const tile = new Tile(x, y);
-        tile.field = new Field();
-        return tile;
-      }),
-    );
-  }
-
-  private restoreCells(savedCells: CellsLayout) {
-    let cellsArray = this.buildCellsLayout();
-
-    return cellsArray.map((row, y) =>
-      row.map((_, x) => {
-        const tile = new Tile(x, y);
-        tile.field = new Field();
-        return tile;
-      }),
-    );
-
-    return savedCells;
   }
 }

@@ -1,13 +1,14 @@
+import type { Vector } from './Vector';
+
 export class Plain {
   width: number;
   height: number;
+  size: Vector;
 
-  constructor(w: number = 1, h: number = 1) {
+  constructor(size: Vector) {
+    const { x: w, y: h } = size;
     this.width = w;
     this.height = h;
-  }
-
-  get size() {
-    return this.width * this.height;
+    this.size = size;
   }
 }
