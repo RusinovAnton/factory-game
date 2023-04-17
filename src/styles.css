@@ -1,10 +1,15 @@
 :root {
   --brand-color: #03a9f4;
-  --bg-color: var(--water-color);
+  --body-bg: linear-gradient(
+    180deg,
+    rgba(222, 178, 226, 1) 0%,
+    rgba(241, 255, 184, 1) 100%
+  );
   --text-color: #003300;
 
   /* Cells  */
-  --terrain-color: #afd076;
+  /* --terrain-color: #afd076; */
+  --terrain-color: #b2b3bc;
   --forest-color: #086826;
   --water-color: #b0f4ff;
   --cement-color: #bdbdb4;
@@ -29,9 +34,8 @@ body {
   font-family: Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: var(--bg-color);
+  background: var(--body-bg);
   color: var(--text-color);
-  padding: 500px;
 }
 
 body.factory-type-selected--bank {

@@ -12,6 +12,7 @@ const SPRITE_PATH_COLOR = 'rgba(0, 100, 200, 0.4)';
 
 const svgRoot = document.getElementById('svg-layers');
 const pathLayerNode = document.getElementById('path-layer');
+const structuresLayerNode = document.getElementById('structure-layer');
 const spriteLayerNode = document.getElementById('sprite-layer');
 
 function setElementAttributes(element, attributes) {
@@ -246,4 +247,22 @@ export class GameMapHTMLRenderer implements Emittable {
 
     document.removeEventListener('contextmenu', this.commitPath);
   };
+
+  renderStructure(coord: Vector) {
+    const p1 = coord;
+    const p2 = coord.add(new Vector(1, 1));
+    const p3 = coord.add(new Vector(0, 1));
+
+    const points: string = [p1, p2, p3].reduce(
+      (str, point) => `${str} ${point.x},${point.y}`,
+      '',
+    );
+
+    const polygon = createSVGElement('polygon', {
+      points,
+      fill: randomColor(),
+    });
+
+    structuresLayerNode.appendChild(polygon);
+  }
 }

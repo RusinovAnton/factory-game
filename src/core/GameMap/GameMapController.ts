@@ -4,12 +4,11 @@ import { PathLayerController } from './PathLayerController';
 import { GameMap } from './model/GameMap';
 import { GameMapHTMLRenderer } from './view/GameMapHTMLRenderer';
 
-// TODO:
 const WIDTH = 64;
 const HEIGHT = 64;
 
 interface ViewState {
-  activeTool: 'path' | null;
+  activeTool: 'path' | 'structure' | null;
   selectedStructureType: string | null;
 }
 
@@ -47,6 +46,10 @@ export class GameMapController {
 
   restoreSave() {}
 
+  selectTool(activeTool: 'path' | 'structure' | null) {
+    this.state.activeTool = activeTool;
+  }
+
   #init() {
     /** View events */
     this.view.on('cell:click', this.#handleCellClick.bind(this));
@@ -68,7 +71,7 @@ export class GameMapController {
     if (this.state.activeTool === 'path') {
       this.pathLayer.handleCellClick(event);
     } else if (this.state.activeTool === 'structure') {
-      // this.structureLayer.handleCellClick(event)
+      this.view.renderStructure(event.coord);
     }
 
     return;

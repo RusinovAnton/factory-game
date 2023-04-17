@@ -11,6 +11,12 @@ export class Vector {
     return new Vector(this.x, this.y);
   }
 
+  add(vector: Vector) {
+    const x = vector.x + this.x;
+    const y = vector.y + this.y;
+    return new Vector(x, y);
+  }
+
   diff(vector: Vector): Vector {
     const x = vector.x - this.x;
     const y = vector.y - this.y;
