@@ -1,14 +1,19 @@
 import type { Vector } from './Vector';
 
 export class Plain {
+  size: Vector;
   width: number;
   height: number;
-  size: Vector;
 
   constructor(size: Vector) {
-    const { x: w, y: h } = size;
-    this.width = w;
-    this.height = h;
+    const { x, y } = size;
+
     this.size = size;
+    this.width = x;
+    this.height = y;
+  }
+
+  toJSON() {
+    return { size: this.size };
   }
 }

@@ -220,7 +220,7 @@ export class GameMapHTMLRenderer implements Emittable {
     });
   }
 
-  drawSprite(from: Vector, to: Vector) {
+  drawSprite(anchors: Vector[]) {
     if (!this.spritePathNode) {
       this.spritePathNode = createSVGElement('path', {
         fill: 'none',
@@ -231,7 +231,7 @@ export class GameMapHTMLRenderer implements Emittable {
       spriteLayerNode.appendChild(this.spritePathNode);
     }
 
-    const pathString = this.pathToString([from, to]);
+    const pathString = this.pathToString(anchors);
 
     requestAnimationFrame(() => {
       this.spritePathNode.setAttribute('d', pathString);
@@ -248,7 +248,7 @@ export class GameMapHTMLRenderer implements Emittable {
     document.removeEventListener('contextmenu', this.commitPath);
   };
 
-  renderStructure(coord: Vector) {
+  renderStructure(coord: Vector, structure) {
     const p1 = coord;
     const p2 = coord.add(new Vector(1, 1));
     const p3 = coord.add(new Vector(0, 1));

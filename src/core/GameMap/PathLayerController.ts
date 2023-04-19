@@ -34,8 +34,10 @@ export class PathLayerController {
     const startAnchor =
       this.activePath.anchors[this.activePath.anchors.length - 1];
     const endAnchor = coord;
+    this.model.pathLayer;
 
-    this.view.drawSprite(startAnchor, endAnchor);
+    const spritePath = new Path(startAnchor, endAnchor);
+    this.view.drawSprite(spritePath.anchors);
   }
 
   startPath(anchor: Vector) {

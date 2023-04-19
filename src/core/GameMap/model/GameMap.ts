@@ -12,6 +12,7 @@ export class GameMap extends Plain implements Emittable {
   layers: Layer[] = [];
   pathLayer: PathLayer;
   baseLayer: Layer;
+  earnings: 1000;
 
   #ee: EventEmitter;
   on: EventEmitter['on'];

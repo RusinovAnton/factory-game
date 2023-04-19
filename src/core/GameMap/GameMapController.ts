@@ -69,9 +69,11 @@ export class GameMapController {
     if (!this.state.activeTool) return;
 
     if (this.state.activeTool === 'path') {
+      gameSounds.pop();
       this.pathLayer.handleCellClick(event);
     } else if (this.state.activeTool === 'structure') {
-      this.view.renderStructure(event.coord);
+      gameSounds.pop();
+      this.view.renderStructure(event.coord, this.state.selectedStructureType);
     }
 
     return;

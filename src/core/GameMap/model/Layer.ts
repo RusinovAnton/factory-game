@@ -30,6 +30,7 @@ export class Layer extends Plain {
 
   toJSON() {
     return {
+      size: this.size,
       map: this.map,
       layout: this.layout,
     };
