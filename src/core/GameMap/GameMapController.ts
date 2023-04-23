@@ -39,12 +39,12 @@ export class GameMapController {
   }
 
   save() {
-    const json = this.model.toJSON();
-    const saveStr = JSON.stringify(json);
+    const map = this.model.toJSON();
+    const saveStr = JSON.stringify({ map });
     localStorage.setItem('GAME_MAP', saveStr);
   }
 
-  restoreSave() {}
+  // restoreSave() {}
 
   selectTool(activeTool: 'path' | 'structure' | null) {
     this.state.activeTool = activeTool;
@@ -62,7 +62,7 @@ export class GameMapController {
   }
 
   #onPathUpdate(event) {
-    console.log(event);
+    console.debug(event);
   }
 
   #handleCellClick(event) {

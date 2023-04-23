@@ -3,7 +3,7 @@ import EventEmitter3, {
 } from 'eventemitter3';
 
 // FIXME: get value from .env
-const DEBUG = true;
+const DEBUG = false;
 
 export class EventEmitter extends EventEmitter3 {
   type?: string;

@@ -4,14 +4,18 @@ import { EventEmitter, type Emittable } from '../../utils/event-emitter';
 import { yay } from '../../utils/yay/yay';
 import { Layer } from './Layer';
 import { PathLayer } from './PathLayer';
+import { StructureLayer } from './StructureLayer';
 
 const savedState = null;
 
 export class GameMap extends Plain implements Emittable {
   name: string;
+
   layers: Layer[] = [];
-  pathLayer: PathLayer;
   baseLayer: Layer;
+  structuresLayer: StructureLayer;
+  pathLayer: PathLayer;
+
   earnings: 1000;
 
   #ee: EventEmitter;
@@ -33,6 +37,8 @@ export class GameMap extends Plain implements Emittable {
 
     this.#init();
   }
+
+  checkIntersection() {}
 
   #init() {
     console.log('Initializing game map...');

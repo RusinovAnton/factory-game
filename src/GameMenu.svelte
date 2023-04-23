@@ -95,6 +95,7 @@
     -webkit-backdrop-filter: blur(3px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 1rem;
+    z-index: 1;
   }
 
   .build-btn {

@@ -17,8 +17,6 @@ export class PathLayerController {
   activePath: Path = null;
 
   handleCellClick(event) {
-    console.log(`PathLayer click: `, event);
-
     const { coord } = event;
 
     if (!this.activePath) {
@@ -28,6 +26,7 @@ export class PathLayerController {
     }
   }
 
+  pathValid = true;
   handleCellHover(event) {
     if (!this.activePath) return;
     const { coord } = event;
@@ -37,27 +36,46 @@ export class PathLayerController {
     this.model.pathLayer;
 
     const spritePath = new Path(startAnchor, endAnchor);
-    this.view.drawSprite(spritePath.anchors);
+    this.pathValid = !this.model.pathLayer.checkIntersection(
+      spritePath.everyPoint,
+      true,
+    );
+    this.view.drawSprite(spritePath.anchors, this.pathValid);
   }
 
   startPath(anchor: Vector) {
+    if (this.model.pathLayer.checkIntersection([anchor])) {
+      return;
+    }
+
     this.activePath = new Path(anchor);
-    this.renderActivePath();
+    this.renderActivePath(true);
   }
 
   addPathPoint(anchor: Vector) {
+    if (!this.pathValid) {
+      console.error('path is invalid, cannot add point');
+      return;
+    }
     if (!this.activePath) {
       throw new Error("Can't add path anchor point: Path is not created yet");
     }
     this.activePath = this.activePath.addPoint(anchor);
+    this.model.pathLayer.addPath(this.activePath);
     this.renderActivePath();
   }
 
   commitPath() {
+    const path = this.activePath;
     this.activePath = null;
+    if (path.anchors.length === 1) {
+      this.view.cancelLastPath();
+      return;
+    }
+    this.model.pathLayer.addPath(path);
   }
 
-  renderActivePath() {
-    this.view.drawPath(this.activePath.anchors);
+  renderActivePath(startPath = false) {
+    this.view.drawPath(this.activePath.anchors, startPath);
   }
 }

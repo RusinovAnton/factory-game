@@ -21,7 +21,7 @@ const app = new GameMenu({
   props: {
     onStructureSelect(factoryType: string) {
       // controller.selectStructure(factoryType);
-      console.log(factoryType);
+      console.debug(factoryType);
     },
     onToolSelect(activeTool) {
       controller.selectTool(activeTool);

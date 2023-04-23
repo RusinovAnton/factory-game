@@ -1,5 +1,5 @@
 import randomColor from 'randomcolor';
-import { Vector } from '../../Vector';
+import { Vector, type Vertice } from '../../Vector';
 import { EventEmitter, type Emittable } from '../../utils/event-emitter';
 import type { Layout } from '../model/Layer';
 
@@ -9,10 +9,12 @@ type Props = {
 };
 
 const SPRITE_PATH_COLOR = 'rgba(0, 100, 200, 0.4)';
+const INVALID_SPRITE_PATH_COLOR = 'rgba(250, 50, 0, 0.4)';
 
 const svgRoot = document.getElementById('svg-layers');
 const pathLayerNode = document.getElementById('path-layer');
 const structuresLayerNode = document.getElementById('structure-layer');
+const resourcesLayerNode = document.getElementById('resources-layer');
 const spriteLayerNode = document.getElementById('sprite-layer');
 
 function setElementAttributes(element, attributes) {
@@ -30,6 +32,15 @@ function createSVGElement(tagName, attributes = {}) {
   setElementAttributes(element, attributes);
 
   return element;
+}
+
+function detectCollision(a, b) {
+  return (
+    a.x + a.width > b.x &&
+    a.x < b.x + b.width &&
+    a.y + a.height > b.y &&
+    a.y < b.y + b.height
+  );
 }
 
 export class GameMapHTMLRenderer implements Emittable {
@@ -156,7 +167,7 @@ export class GameMapHTMLRenderer implements Emittable {
 
   //  FIXME: move to StructureLayer
   // renderStructure(coord, structure) {
-  //   console.log(
+  //   console.debug(
   //     'Rendering built structure: ',
   //     structure.name,
   //     ' at x: ',
@@ -166,7 +177,7 @@ export class GameMapHTMLRenderer implements Emittable {
   //   );
 
   //   const cell = this.getCellNode(coord);
-  //   console.log(cell);
+  //   console.debug(cell);
   //   cell.innerHTML = `<span>${structure.name}</span>`;
   // }
 
@@ -200,9 +211,10 @@ export class GameMapHTMLRenderer implements Emittable {
     return pathString;
   }
 
-  drawPath(pathAnchors: Vector[]) {
-    if (!this.activePathNode) {
+  drawPath(pathAnchors: Vector[], startPath: boolean = false) {
+    if (startPath) {
       this.activePathNode = createSVGElement('path', {
+        id: `path-${pathAnchors[0].x}-${pathAnchors[0].y}`,
         fill: 'none',
         'stroke-width': 0.5,
         stroke: randomColor(),
@@ -212,24 +224,27 @@ export class GameMapHTMLRenderer implements Emittable {
       document.addEventListener('contextmenu', this.commitPath);
     }
 
-    console.log('drawing path: ', pathAnchors);
-
     const pathString = this.pathToString(pathAnchors);
     requestAnimationFrame(() => {
       this.activePathNode.setAttribute('d', pathString);
     });
   }
 
-  drawSprite(anchors: Vector[]) {
+  drawSprite(anchors: Vector[], valid = true) {
     if (!this.spritePathNode) {
       this.spritePathNode = createSVGElement('path', {
         fill: 'none',
         'stroke-width': 0.5,
-        stroke: SPRITE_PATH_COLOR,
       });
 
       spriteLayerNode.appendChild(this.spritePathNode);
     }
+
+    // FIXME: performance?
+    this.spritePathNode.setAttribute(
+      'stroke',
+      valid ? SPRITE_PATH_COLOR : INVALID_SPRITE_PATH_COLOR,
+    );
 
     const pathString = this.pathToString(anchors);
 
@@ -241,12 +256,92 @@ export class GameMapHTMLRenderer implements Emittable {
   commitPath = (event) => {
     event.preventDefault();
     const pathNode = this.activePathNode;
-    this.activePathNode = null;
+    // FIXME:
+    this.moveResourcesAlongPath(pathNode);
     this.#ee.emit('path:commit', { target: pathNode });
     this.spritePathNode.setAttribute('d', '');
+    this.spritePathNode.setAttribute('stroke', '');
 
     document.removeEventListener('contextmenu', this.commitPath);
   };
+
+  pathResources = [];
+
+  emitResource(start: Vertice) {
+    const distance = 0;
+    const ball = createSVGElement('circle', {
+      fill: randomColor(),
+      r: '0.25',
+      cx: start.x,
+      cy: start.y,
+    });
+    resourcesLayerNode.appendChild(ball);
+
+    const resourceItem = {
+      index: 0,
+      element: ball,
+      distance,
+    };
+
+    const length = this.pathResources.push(resourceItem);
+    resourceItem.index = length - 1;
+    console.log('emit: ', resourceItem.index);
+    return resourceItem;
+  }
+
+  emitIntervalId = null;
+
+  // TODO:
+  // This is a prototype func
+  moveResourcesAlongPath(path: SVGPathElement) {
+    this.pathResources = [];
+    const pathLength = path.getTotalLength();
+    const SPEED = 0.2;
+    const start = path.getPointAtLength(0);
+
+    this.emitIntervalId = setInterval(() => {
+      if (this.pathResources.length > pathLength * 5) {
+        clearInterval(this.emitIntervalId);
+        return;
+      }
+      const item = this.emitResource(start);
+      console.log(this.pathResources);
+
+      requestAnimationFrame(() => animate(item));
+    }, 500);
+
+    const animate = (item) => {
+      const nextIndex = item.index - 1;
+
+      if (nextIndex >= 0) {
+        const nextItem = this.pathResources[nextIndex];
+        const nextRect = nextItem.element.getBoundingClientRect();
+        const rect = item.element.getBoundingClientRect();
+
+        const collide = detectCollision(rect, nextRect);
+
+        if (collide) {
+          return;
+        }
+      }
+
+      item.distance += SPEED;
+      if (item.distance >= pathLength) {
+        // item.element.remove();
+        return;
+      }
+      const position = path.getPointAtLength(item.distance);
+
+      item.element.setAttribute('cx', position.x);
+      item.element.setAttribute('cy', position.y);
+      requestAnimationFrame(() => animate(item));
+    };
+  }
+
+  cancelLastPath() {
+    this.activePathNode.remove();
+    this.activePathNode = null;
+  }
 
   renderStructure(coord: Vector, structure) {
     const p1 = coord;
