@@ -42,14 +42,14 @@ export class Layer extends Plain {
      *  [6,5,4],
      */
     const adjacentVectors = [
-      new Vector(-1, -1),
-      new Vector(0, -1),
-      new Vector(1, -1),
-      new Vector(1, 0),
-      new Vector(1, 1),
-      new Vector(0, 1),
-      new Vector(-1, 1),
-      new Vector(-1, 0),
+      { x: -1, y: -1 },
+      { x: 0, y: -1 },
+      { x: 1, y: -1 },
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+      { x: 0, y: 1 },
+      { x: -1, y: 1 },
+      { x: -1, y: 0 },
     ];
     const v = new Vector(coord);
     const adjacent = adjacentVectors.reduce((acc, vv) => {

@@ -213,11 +213,13 @@ export class GameMapHTMLRenderer implements Emittable {
   }
 
   drawPath(pathAnchors: Vector[], startPath: boolean = false) {
+    const PATH_WIDTH = 0.7;
+
     if (startPath) {
       this.activePathNode = createSVGElement('path', {
         id: `path-${pathAnchors[0].x}-${pathAnchors[0].y}`,
         fill: 'none',
-        'stroke-width': 0.5,
+        'stroke-width': PATH_WIDTH,
         stroke: randomColor(),
       });
 
@@ -270,14 +272,14 @@ export class GameMapHTMLRenderer implements Emittable {
 
   emitResource(start: Vertice) {
     const distance = 0;
+
+    const RESOURCE_ITEM_COLOR = '#031450';
+    const RESOURCE_ITEM_SIZE = 0.3;
     const ball = createSVGElement('circle', {
-      fill: randomColor(),
-      r: '0.25',
+      fill: RESOURCE_ITEM_COLOR,
+      r: RESOURCE_ITEM_SIZE,
       cx: start.x,
       cy: start.y,
-    });
-    requestAnimationFrame(() => {
-      resourcesLayerNode.appendChild(ball);
     });
 
     const resourceItem = {
@@ -288,6 +290,11 @@ export class GameMapHTMLRenderer implements Emittable {
 
     const length = this.pathResources.push(resourceItem);
     resourceItem.index = length - 1;
+
+    requestAnimationFrame(() => {
+      resourcesLayerNode.appendChild(ball);
+    });
+
     return resourceItem;
   }
 
@@ -298,17 +305,20 @@ export class GameMapHTMLRenderer implements Emittable {
   moveResourcesAlongPath(path: SVGPathElement) {
     this.pathResources = [];
     const pathLength = path.getTotalLength();
-    const BELT_SPEED = 0.3;
+    const BELT_SPEED = 0.08;
+    const EMIT_SPEED = 200;
+    const CONSUME_SPEED = 300;
+
     const start = path.getPointAtLength(0);
 
     this.emitIntervalId = setInterval(() => {
-      if (this.pathResources.length > pathLength * 5) {
+      if (this.pathResources.length > pathLength) {
         clearInterval(this.emitIntervalId);
         return;
       }
       const item = this.emitResource(start);
       requestAnimationFrame(() => animate(item));
-    }, 500);
+    }, EMIT_SPEED);
 
     const animate = (item) => {
       const nextIndex = item.index - 1;
@@ -320,13 +330,16 @@ export class GameMapHTMLRenderer implements Emittable {
         const collide = detectCollision(rect, nextRect);
 
         if (collide) {
+          requestAnimationFrame(() => animate(item));
           return;
         }
       }
 
       item.distance += BELT_SPEED;
       if (item.distance >= pathLength) {
-        // item.element.remove();
+        setTimeout(() => {
+          item.element.remove();
+        }, CONSUME_SPEED);
         return;
       }
       const position = path.getPointAtLength(item.distance);

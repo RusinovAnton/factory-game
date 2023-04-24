@@ -26,8 +26,8 @@ export class PathLayer extends Layer {
     return path;
   }
 
-  checkIntersection(point: Vector, isContinue);
-  checkIntersection(points: Vector[], isContinue);
+  checkIntersection(point: Vector, isContinue?);
+  checkIntersection(points: Vector[], isContinue?);
   checkIntersection(points: Vector | Vector[], isContinue = false): boolean {
     const intersects = [].concat(points).reduce((intersects, point, index) => {
       if (intersects) return intersects;
@@ -36,5 +36,9 @@ export class PathLayer extends Layer {
       return hasItem;
     }, false);
     return intersects;
+  }
+
+  toJSON() {
+    return super.toJSON();
   }
 }
