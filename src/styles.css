@@ -129,8 +129,7 @@ body.factory-type-selected--research-lab {
 .game-map {
   position: relative;
   width: fit-content;
-  /* FIXME: SVG doesn't display properly */
-  /* transform: rotate3d(1, 0, 0, 55deg) rotate(45deg); */
+  transform: rotate3d(1, 0, 0, 55deg) rotate(45deg);
 }
 
 .game-map svg {

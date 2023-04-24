@@ -35,11 +35,12 @@ function createSVGElement(tagName, attributes = {}) {
 }
 
 function detectCollision(a, b) {
+  const HITBOX_COEFFICIENT = 0.7;
   return (
-    a.x + a.width > b.x &&
-    a.x < b.x + b.width &&
-    a.y + a.height > b.y &&
-    a.y < b.y + b.height
+    a.x + a.width * HITBOX_COEFFICIENT > b.x &&
+    a.x < b.x + b.width * HITBOX_COEFFICIENT &&
+    a.y + a.height * HITBOX_COEFFICIENT > b.y &&
+    a.y < b.y + b.height * HITBOX_COEFFICIENT
   );
 }
 
@@ -275,7 +276,9 @@ export class GameMapHTMLRenderer implements Emittable {
       cx: start.x,
       cy: start.y,
     });
-    resourcesLayerNode.appendChild(ball);
+    requestAnimationFrame(() => {
+      resourcesLayerNode.appendChild(ball);
+    });
 
     const resourceItem = {
       index: 0,
@@ -285,7 +288,6 @@ export class GameMapHTMLRenderer implements Emittable {
 
     const length = this.pathResources.push(resourceItem);
     resourceItem.index = length - 1;
-    console.log('emit: ', resourceItem.index);
     return resourceItem;
   }
 
@@ -296,7 +298,7 @@ export class GameMapHTMLRenderer implements Emittable {
   moveResourcesAlongPath(path: SVGPathElement) {
     this.pathResources = [];
     const pathLength = path.getTotalLength();
-    const SPEED = 0.2;
+    const BELT_SPEED = 0.3;
     const start = path.getPointAtLength(0);
 
     this.emitIntervalId = setInterval(() => {
@@ -305,19 +307,16 @@ export class GameMapHTMLRenderer implements Emittable {
         return;
       }
       const item = this.emitResource(start);
-      console.log(this.pathResources);
-
       requestAnimationFrame(() => animate(item));
     }, 500);
 
     const animate = (item) => {
       const nextIndex = item.index - 1;
+      const nextItem = this.pathResources[nextIndex];
 
-      if (nextIndex >= 0) {
-        const nextItem = this.pathResources[nextIndex];
+      if (nextItem) {
         const nextRect = nextItem.element.getBoundingClientRect();
         const rect = item.element.getBoundingClientRect();
-
         const collide = detectCollision(rect, nextRect);
 
         if (collide) {
@@ -325,7 +324,7 @@ export class GameMapHTMLRenderer implements Emittable {
         }
       }
 
-      item.distance += SPEED;
+      item.distance += BELT_SPEED;
       if (item.distance >= pathLength) {
         // item.element.remove();
         return;
