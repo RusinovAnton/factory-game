@@ -1,17 +1,24 @@
-import { Vector } from '../../Vector';
+import { Vector, type Vertice } from '../../Vector';
+
+const PATH_STRING_JOINER = ';';
 
 export class Path {
-  anchors: Vector[] = null;
+  anchors: Vertice[] = [];
 
-  constructor(from: Vector, to?: Vector) {
-    this.anchors = [];
-    this.addPoint(from);
+  constructor(from?: Vertice, to?: Vertice) {
+    if (from) {
+      this.addPoint(from);
+    }
     if (to) {
       this.addPoint(to);
     }
   }
 
-  addPoint(to: Vector) {
+  toString(): string {
+    return Path.anchorsToString(this.anchors);
+  }
+
+  addPoint(to: Vertice) {
     if (this.anchors.length) {
       const from = this.anchors[this.anchors.length - 1];
       const dx = to.x - from.x;
@@ -71,14 +78,38 @@ export class Path {
     return points;
   }
 
-  static delta(from: Vector, to: Vector): Vector {
+  toJSON() {
+    return this.anchors;
+  }
+
+  static fromString(pathString: string) {
+    const path = new Path();
+    path.anchors = Path.stringToAnchors(pathString);
+    return path;
+  }
+
+  static stringToAnchors(pathString: string): Vertice[] {
+    const anchorStringList = pathString.split(PATH_STRING_JOINER);
+    const anchors = anchorStringList.map((str) => {
+      const [x, y] = str.split(',');
+      return {
+        x: +x,
+        y: +y,
+      };
+    });
+    return anchors;
+  }
+
+  static anchorsToString(anchors: Vertice[]): string {
+    return anchors
+      .map((anchor) => `${anchor.x},${anchor.y}`)
+      .join(PATH_STRING_JOINER);
+  }
+
+  static delta(from: Vertice, to: Vertice): Vector {
     const dx = to.x - from.x;
     const dy = to.y - from.y;
 
     return new Vector(dx, dy);
-  }
-
-  toJSON() {
-    return this.anchors;
   }
 }

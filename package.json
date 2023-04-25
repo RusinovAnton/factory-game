@@ -24,6 +24,7 @@
   "dependencies": {
     "eventemitter3": "^5.0.0",
     "howler": "^2.2.3",
+    "keyboardjs": "^2.7.0",
     "localforage": "^1.10.0",
     "normalize.css": "^8.0.1",
     "randomcolor": "^0.6.2"

@@ -26,6 +26,12 @@ const app = new GameMenu({
     onToolSelect(activeTool) {
       controller.selectTool(activeTool);
     },
+    onGameSave() {
+      controller.save();
+    },
+    onGameSaveClear() {
+      controller.clearSave();
+    },
   },
 });
 

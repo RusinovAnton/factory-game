@@ -9,13 +9,13 @@ export class Resource implements ResourceT<ResourceType> {
   type: ResourceType;
   cost: number;
 
-  constructor(type: ResourceType, cost: number = 0) {
+  constructor(type: ResourceType, cost = 0) {
     this.type = type;
     this.cost = cost;
   }
 }
 
-export function createResource(type: ResourceType, cost: number = 0) {
+export function createResource(type: ResourceType, cost) {
   return new Resource(type, cost);
 }
 

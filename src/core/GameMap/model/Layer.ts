@@ -5,13 +5,16 @@ export type LayerMap = { [index: number]: string };
 export type Layout = number[][];
 
 export class Layer extends Plain {
+  layerName: string;
   map: LayerMap;
   empty: null | any;
+  pristine = true;
   #layout: Layout;
 
-  constructor(size: Vector, map = {}, empty = null) {
+  constructor(layerName: string, size: Vertice, map = {}, empty = null) {
     super(size);
 
+    this.layerName = layerName;
     this.empty = empty;
     this.map = map;
 
@@ -20,6 +23,11 @@ export class Layer extends Plain {
 
   get layout() {
     return this.#layout;
+  }
+
+  set layout(l) {
+    if (!l) return;
+    this.#layout = l;
   }
 
   hasItem(coord: Vertice) {
@@ -33,6 +41,7 @@ export class Layer extends Plain {
   setItem(coord: Vertice, item: number) {
     const { x, y } = coord;
     this.layout[y][x] = item;
+    this.pristine = false;
   }
 
   getAdjacent(coord: Vertice): Vector[] {
@@ -74,10 +83,14 @@ export class Layer extends Plain {
   }
 
   toJSON() {
+    const { layerName, size, map, layout, empty, pristine } = this;
+
     return {
-      size: this.size,
-      map: this.map,
-      layout: this.layout,
+      layerName,
+      size,
+      map,
+      layout: pristine ? null : layout,
+      empty,
     };
   }
 }

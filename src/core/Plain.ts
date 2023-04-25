@@ -1,14 +1,21 @@
-import type { Vector } from './Vector';
+import type { Vertice } from './Vector';
 
-export class Plain {
-  size: Vector;
+export abstract class Plain {
+  _size: Vertice;
   width: number;
   height: number;
 
-  constructor(size: Vector) {
-    const { x, y } = size;
-
+  constructor(size: Vertice) {
     this.size = size;
+  }
+
+  get size() {
+    return this._size;
+  }
+
+  set size(size: Vertice) {
+    const { x, y } = size;
+    this._size = size;
     this.width = x;
     this.height = y;
   }

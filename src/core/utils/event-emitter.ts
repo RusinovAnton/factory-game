@@ -21,14 +21,14 @@ export class EventEmitter extends EventEmitter3 {
 
   emit(eventType, payload): boolean {
     this.#log(eventType, payload);
-    if (this.type && !payload.hasOwnProperty('type')) {
+    if (this.type && typeof payload.type === 'string') {
       payload.type = payload.type || this.type;
     }
     return super.emit(eventType, payload);
   }
 }
 
-export interface Emittable {
+export interface Emitter {
   on: EventEmitterT['on'];
   once: EventEmitterT['once'];
 }

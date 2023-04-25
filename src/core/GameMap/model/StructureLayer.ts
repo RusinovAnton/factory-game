@@ -1,7 +1,11 @@
 import { Layer } from './Layer';
 
+const structuresMap = {};
+
 export class StructureLayer extends Layer {
-  constructor() {
-    super();
+  static layerName = 'structureLayer';
+
+  constructor(size) {
+    super(StructureLayer.layerName, size, structuresMap);
   }
 }

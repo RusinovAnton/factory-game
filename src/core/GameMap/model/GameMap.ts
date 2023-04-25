@@ -1,28 +1,31 @@
 import { Plain } from '../../Plain';
-import type { Vector } from '../../Vector';
-import { EventEmitter, type Emittable } from '../../utils/event-emitter';
+import type { Vertice } from '../../Vector';
+import { EventEmitter, type Emitter } from '../../utils/event-emitter';
 import { yay } from '../../utils/yay/yay';
-import { Layer } from './Layer';
+import { BaseLayer } from './BaseLayer';
+import type { Layer } from './Layer';
 import { PathLayer } from './PathLayer';
 import { StructureLayer } from './StructureLayer';
 
-const savedState = null;
+const layersMap = {
+  [BaseLayer.layerName]: BaseLayer,
+  [PathLayer.layerName]: PathLayer,
+  [StructureLayer.layerName]: StructureLayer,
+};
 
-export class GameMap extends Plain implements Emittable {
+export class GameMap extends Plain implements Emitter {
   name: string;
 
   layers: Layer[] = [];
-  baseLayer: Layer;
-  structuresLayer: StructureLayer;
+  baseLayer: BaseLayer;
   pathLayer: PathLayer;
-
-  earnings: 1000;
+  structuresLayer: StructureLayer;
 
   #ee: EventEmitter;
   on: EventEmitter['on'];
   once: EventEmitter['once'];
 
-  constructor(size: Vector) {
+  constructor(size: Vertice, saved?) {
     super(size);
 
     const eventEmitter = new EventEmitter('model:update');
@@ -30,35 +33,50 @@ export class GameMap extends Plain implements Emittable {
     this.on = this.#ee.on.bind(this.#ee);
     this.once = this.#ee.once.bind(this.#ee);
 
-    this.baseLayer = new Layer(size);
-    this.pathLayer = new PathLayer(size, eventEmitter);
-    this.layers.push(this.baseLayer);
-    this.layers.push(this.pathLayer);
-
-    this.#init();
+    if (saved) {
+      this.#restoreSavedState(saved);
+    } else {
+      this.#init();
+    }
   }
 
-  checkIntersection() {}
+  // checkIntersection() {}
 
   #init() {
     console.log('Initializing game map...');
 
-    if (savedState) {
-      this.#restoreSavedState();
-    } else {
-      this.name = yay();
-    }
+    this.name = yay();
+
+    this.baseLayer = new BaseLayer(this.size);
+    this.layers.push(this.baseLayer);
+
+    this.pathLayer = new PathLayer(this.size, this.#ee);
+    this.layers.push(this.pathLayer);
+
+    this.structuresLayer = new StructureLayer(this.size);
+    this.layers.push(this.structuresLayer);
   }
 
-  #restoreSavedState() {
-    const { name, width, height, layers } = savedState;
-    this.width = savedState.width;
-    this.height = savedState.height;
-    this.name = savedState.name;
-    this.layers = [];
-  }
+  #restoreSavedState(savedState) {
+    console.log('Restoring saved state');
 
-  build(coord: { x: number; y: number }, structureType: string) {}
+    const { name, size, layers } = savedState;
+    super.size = size;
+    this.name = name;
+    layers.forEach((l) => {
+      const { size, layerName, layout, pathList } = l;
+      const LayerClass = layersMap[layerName];
+      const layer = new LayerClass(size, layerName ? this.#ee : undefined);
+      layer.layout = layout;
+
+      if (layerName === 'pathLayer') {
+        (layer as PathLayer).pathList = pathList;
+      }
+
+      this[layerName] = layer;
+      this.layers.push(layer);
+    });
+  }
 
   toJSON() {
     return {

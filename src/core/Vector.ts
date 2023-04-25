@@ -1,12 +1,14 @@
-export interface Vertice {
+export abstract class Vertice {
   x: number;
   y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
 }
 
-export class Vector implements Vertice {
-  x: number;
-  y: number;
-
+export class Vector extends Vertice {
   constructor(v: Vertice);
   constructor(x: number, y: number);
   constructor(xv: number | Vertice, y?: number) {
@@ -15,6 +17,7 @@ export class Vector implements Vertice {
     }
 
     if (typeof xv === 'number' && typeof y === 'number') {
+      super(xv, y);
       this.x = xv;
       this.y = y;
 
@@ -22,6 +25,7 @@ export class Vector implements Vertice {
     } else {
       const v = xv as Vertice;
       if (typeof v.x === 'number' && typeof v.y === 'number') {
+        super(v.x, v.y);
         this.x = v.x;
         this.y = v.y;
         return this;

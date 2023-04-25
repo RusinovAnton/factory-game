@@ -40,7 +40,7 @@ export class PathLayerController {
       spritePath.everyPoint,
       true,
     );
-    this.view.drawSprite(spritePath.anchors, this.pathValid);
+    this.view.paths.drawSprite(spritePath.anchors, this.pathValid);
   }
 
   startPath(anchor: Vector) {
@@ -49,7 +49,7 @@ export class PathLayerController {
     }
 
     this.activePath = new Path(anchor);
-    this.renderActivePath(true);
+    this.renderActivePath();
   }
 
   addPathPoint(anchor: Vector) {
@@ -62,20 +62,20 @@ export class PathLayerController {
     }
     this.activePath = this.activePath.addPoint(anchor);
     this.model.pathLayer.addPath(this.activePath);
-    this.renderActivePath();
+    this.renderActivePath(false);
   }
 
   commitPath() {
     const path = this.activePath;
     this.activePath = null;
     if (path.anchors.length === 1) {
-      this.view.cancelLastPath();
+      this.view.paths.cancelLastPath();
       return;
     }
     this.model.pathLayer.addPath(path);
   }
 
-  renderActivePath(startPath = false) {
-    this.view.drawPath(this.activePath.anchors, startPath);
+  renderActivePath(startPath = true) {
+    this.view.paths.drawPath(this.activePath.anchors, startPath);
   }
 }

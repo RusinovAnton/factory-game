@@ -7,10 +7,10 @@ class Store {
     this.store = s;
   }
 
-  async restore() {
+  async restore(): Promise<string> {
     try {
       const saving = await this.store.getItem('save');
-      return saving;
+      return (saving as string) || '';
     } catch (error) {
       console.debug(error);
     }
@@ -24,8 +24,13 @@ class Store {
       console.debug(error);
     }
   }
+
+  clear() {
+    return this.store.clear();
+  }
 }
 
-const store = createInstance({ name: `factory-game` });
+const config = { name: 'factory-game', version: 0.1 };
+const store = createInstance(config);
 
-export const gameStore = new Store(store);
+export const storage = new Store(store);

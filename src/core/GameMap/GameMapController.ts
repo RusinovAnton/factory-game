@@ -1,5 +1,6 @@
 import { Vector } from '../Vector';
 import { gameSounds } from '../sound/GameSounds';
+import { storage } from '../storage/Storage';
 import { PathLayerController } from './PathLayerController';
 import { GameMap } from './model/GameMap';
 import { GameMapHTMLRenderer } from './view/GameMapHTMLRenderer';
@@ -22,35 +23,57 @@ export class GameMapController {
   pathLayer: PathLayerController;
 
   constructor(root: HTMLElement) {
-    const size = new Vector(WIDTH, HEIGHT);
-    this.model = new GameMap(size);
-    const {
-      name,
-      baseLayer: { layout },
-    } = this.model;
-
-    this.view = new GameMapHTMLRenderer(root, size, {
-      name,
-      layout,
-    });
-    this.pathLayer = new PathLayerController(this.view, this.model);
-
-    this.#init();
+    this.#init(root);
   }
 
   save() {
     const map = this.model.toJSON();
-    const saveStr = JSON.stringify({ map });
-    localStorage.setItem('GAME_MAP', saveStr);
+    const saving = JSON.stringify({ map });
+
+    return storage.save(saving).then(() => {
+      alert('Saved successfully!');
+      console.log('Saved successfully!');
+    });
   }
 
-  // restoreSave() {}
+  clearSave() {
+    return storage.clear();
+  }
+
+  async restoreSave() {
+    const savedState = await storage.restore();
+    if (!savedState) return;
+    return JSON.parse(savedState);
+  }
 
   selectTool(activeTool: 'path' | 'structure' | null) {
     this.state.activeTool = activeTool;
   }
 
-  #init() {
+  async #init(root) {
+    const savedState = await this.restoreSave();
+    const size = { x: WIDTH, y: HEIGHT };
+    this.model = new GameMap(size, savedState?.map);
+    const {
+      name,
+      baseLayer: { layout, map: layoutMap },
+      pathLayer: { pathList },
+    } = this.model;
+
+    this.view = new GameMapHTMLRenderer(root, size);
+    this.pathLayer = new PathLayerController(this.view, this.model);
+
+    this.#initEventListeners();
+
+    this.view.render({
+      name,
+      layoutMap,
+      layout,
+      pathList,
+    });
+  }
+
+  #initEventListeners() {
     /** View events */
     this.view.on('cell:click', this.#handleCellClick.bind(this));
     this.view.on('cell:mouseover', this.#handleCellHover.bind(this));
@@ -73,7 +96,10 @@ export class GameMapController {
       this.pathLayer.handleCellClick(event);
     } else if (this.state.activeTool === 'structure') {
       gameSounds.pop();
-      this.view.renderStructure(event.coord, this.state.selectedStructureType);
+      this.view.structures.renderStructure(
+        event.coord,
+        this.state.selectedStructureType,
+      );
     }
 
     return;
