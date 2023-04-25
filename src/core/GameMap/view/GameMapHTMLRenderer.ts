@@ -88,7 +88,8 @@ export class GameMapHTMLRenderer implements Emitter {
     this.grid.render({ name, layout, layoutMap });
 
     pathList.forEach((path) => {
-      this.paths.drawPath(path.anchors);
+      const pathNode = this.paths.drawPath(path.anchors);
+      this.resources.moveResourcesAlongPath({ target: pathNode });
     });
 
     this.rendered = true;

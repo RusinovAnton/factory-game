@@ -15,12 +15,24 @@ export function createSVGElement(tagName, attributes = {}) {
   return element;
 }
 
-export function detectCollision(a, b) {
-  const HITBOX_COEFFICIENT = 0.5;
+type Rect = {
+  width: number;
+  height: number;
+  x: number;
+  y: number;
+};
+
+const HITBOX_COEFFICIENT = 0.5;
+
+export function detectCollision(
+  a: Rect,
+  b: Rect,
+  hitboxCoef = HITBOX_COEFFICIENT,
+) {
   return (
-    a.x + a.width * HITBOX_COEFFICIENT > b.x &&
-    a.x < b.x + b.width * HITBOX_COEFFICIENT &&
-    a.y + a.height * HITBOX_COEFFICIENT > b.y &&
-    a.y < b.y + b.height * HITBOX_COEFFICIENT
+    a.x + a.width * hitboxCoef > b.x &&
+    a.x < b.x + b.width * hitboxCoef &&
+    a.y + a.height * hitboxCoef > b.y &&
+    a.y < b.y + b.height * hitboxCoef
   );
 }

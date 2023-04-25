@@ -1,3 +1,4 @@
+import randomcolor from 'randomcolor';
 import type { Vertice } from '../../Vector';
 import type { EventEmitter } from '../../utils/event-emitter';
 import { Renderer } from './Renderer';
@@ -44,7 +45,7 @@ export class PathRenderer extends Renderer<SVGElement> {
         id: `path-${pathAnchors[0].x}-${pathAnchors[0].y}`,
         fill: 'none',
         'stroke-width': PATH_WIDTH,
-        stroke: PATH_COLOR,
+        stroke: randomcolor(),
       });
 
       this.root.appendChild(this.activePath);
@@ -53,6 +54,7 @@ export class PathRenderer extends Renderer<SVGElement> {
 
     const pathString = this.pathToString(pathAnchors);
     this.activePath.setAttribute('d', pathString);
+    return this.activePath;
   }
 
   drawSprite(anchors: Vertice[], valid = true) {
