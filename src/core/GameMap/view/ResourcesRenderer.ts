@@ -20,7 +20,7 @@ export class ResourcesRenderer extends Renderer<SVGElement> {
 
   constructor(root) {
     super(root);
-    this.observer = new IntersectionObserver(this.observeHanlder.bind(this));
+    this.observer = new IntersectionObserver(this.observeHandler.bind(this));
   }
 
   static getResourceItemRect(item: ResourceItem) {
@@ -32,8 +32,11 @@ export class ResourcesRenderer extends Renderer<SVGElement> {
     };
   }
 
-  observeHanlder() {}
+  observeHandler(entry) {
+    console.log(entry);
+  }
 
+  ballLength = 0;
   moveResourcesAlongPath(event) {
     const path = event.target;
     const pathResources: ResourceItem[] = [];
@@ -59,11 +62,14 @@ export class ResourcesRenderer extends Renderer<SVGElement> {
         element: ball,
         distance,
       };
+      this.observer.observe(resourceItem.element);
 
       const length = pathResources.push(resourceItem);
       resourceItem.index = length - 1;
 
       requestAnimationFrame(() => {
+        this.ballLength++;
+        console.log(this.ballLength);
         this.root.appendChild(ball);
       });
 
@@ -87,7 +93,9 @@ export class ResourcesRenderer extends Renderer<SVGElement> {
 
       item.distance += BELT_SPEED;
       if (item.distance >= pathLength) {
+        this.observer.unobserve(item.element);
         setTimeout(() => {
+          this.ballLength--;
           item.element.remove();
         }, CONSUME_SPEED);
         return;
